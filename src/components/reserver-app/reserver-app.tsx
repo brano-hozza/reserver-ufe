@@ -40,18 +40,12 @@ export class ReserverApp {
 
   render() {
     const navigate = (path: string) => {
-
-      console.log('Base path:',this.basePath)
-      console.log(new URL(path, new URL(this.basePath, document.baseURI)))
-      console.log(new URL(this.basePath, document.baseURI))
       const absolute = new URL(path, new URL(this.basePath, document.baseURI)).pathname;
-      console.log('Absolute:', absolute)
       window.navigation.navigate(absolute);
     };
 
     let pageType: CurrentPage = 'list';
     let entityId = '@new'
-    console.log('Relative path:', this.relativePath)
     if (this.relativePath.startsWith('reservation/')) {
       pageType = 'reservation-editor';
       entityId = this.relativePath.split('/')[1];
