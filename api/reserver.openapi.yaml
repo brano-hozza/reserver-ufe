@@ -1,0 +1,60 @@
+openapi: 3.0.0
+servers:
+  - description: Cluster Endpoint
+    url: /api
+info:
+  description: Room reservation management for Web-In-Cloud system
+  version: "1.0.0"
+  title: Reserver Api
+  contact:
+    email: xhozza@stuba.sk
+  license:
+    name: CC BY 4.0
+    url: "https://creativecommons.org/licenses/by/4.0/"
+tags:
+  - name: roomReservation
+    description: Room reservation API
+paths:
+ "/reservation":
+  get: 
+    tags:
+      - roomReservation
+    summary: Provides the list of current reservations
+    operationId: getReservations
+    description: Use this method to get list of all reservations
+    responses:
+      "200":
+        description: value of the reservations
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Reservation"
+            examples:
+              response:
+                $ref: "#/components/examples/ReservationListExample"
+
+components:
+  schemas:
+   Reservation:
+      type: object
+      required: [ "id", "roomNumber"]
+      properties:
+        id:
+          type: string
+          example: random-string
+          description: Unique identifier of the reservation
+        roomNumber:
+          type: string
+          example: 356 - 3.posch
+  examples:
+    ReservationListExample:
+      summary: List of room reservations
+      description: |
+        Example list of room reservations in the hospital
+      value:
+        - id: asdasd
+          roomNumber: "12 - 1.posch"
+        - id: dsadsa
+          roomNumber: "1 - 2.posch"

@@ -1,0 +1,20 @@
+{
+    "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+    "generator-cli": {
+        "useDocker": true,
+        "version": "6.6.0",
+        "generators": {
+            "reserver": {
+                "generatorName": "typescript-axios",
+                "glob": "api/reserver.openapi.yaml",
+                "output": "#{cwd}/src/api/reserver",
+                "additionalProperties": {
+                    "supportsES6": "true",
+                    "withInterfaces": true,
+                    "enablePostProcessFile": true
+                }
+            }
+        }
+    }
+  }
+  
