@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Reserver Api
- * Room reservation management for Web-In-Cloud system
+ * Room and ambulance reservation management for Web-In-Cloud system
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: xhozza@stuba.sk

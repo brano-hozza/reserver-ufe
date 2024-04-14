@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Reserver Api
- * Room reservation management for Web-In-Cloud system
+ * Room and ambulance reservation management for Web-In-Cloud system
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: xhozza@stuba.sk
@@ -26,22 +26,256 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 /**
  * 
  * @export
- * @interface Reservation
+ * @interface Department
  */
-export interface Reservation {
+export interface Department {
+    /**
+     * Unique identifier of the department
+     * @type {string}
+     * @memberof Department
+     */
+    'id': string;
+    /**
+     * Name of the hospital department
+     * @type {string}
+     * @memberof Department
+     */
+    'name': string;
+    /**
+     * Description of the department
+     * @type {string}
+     * @memberof Department
+     */
+    'description'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Doctor
+ */
+export interface Doctor {
+    /**
+     * Unique identifier of the department
+     * @type {string}
+     * @memberof Doctor
+     */
+    'id': string;
+    /**
+     * Name of the hospital department
+     * @type {string}
+     * @memberof Doctor
+     */
+    'name': string;
+    /**
+     * ID of their department
+     * @type {string}
+     * @memberof Doctor
+     */
+    'department': string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomReservation
+ */
+export interface RoomReservation {
     /**
      * Unique identifier of the reservation
      * @type {string}
-     * @memberof Reservation
+     * @memberof RoomReservation
      */
     'id': string;
     /**
      * 
      * @type {string}
-     * @memberof Reservation
+     * @memberof RoomReservation
      */
     'roomNumber': string;
 }
+
+/**
+ * DepartmentsApi - axios parameter creator
+ * @export
+ */
+export const DepartmentsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Use this method to get list of all departments
+         * @summary Provide the list of all departments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDepartments: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/departments`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to get list of all doctors with their department
+         * @summary Provide list of all doctors
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDoctors: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/doctors`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DepartmentsApi - functional programming interface
+ * @export
+ */
+export const DepartmentsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DepartmentsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Use this method to get list of all departments
+         * @summary Provide the list of all departments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDepartments(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Department>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDepartments(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to get list of all doctors with their department
+         * @summary Provide list of all doctors
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDoctors(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Doctor>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDoctors(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DepartmentsApi - factory interface
+ * @export
+ */
+export const DepartmentsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DepartmentsApiFp(configuration)
+    return {
+        /**
+         * Use this method to get list of all departments
+         * @summary Provide the list of all departments
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDepartments(options?: any): AxiosPromise<Array<Department>> {
+            return localVarFp.getDepartments(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to get list of all doctors with their department
+         * @summary Provide list of all doctors
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDoctors(options?: any): AxiosPromise<Array<Doctor>> {
+            return localVarFp.getDoctors(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DepartmentsApi - interface
+ * @export
+ * @interface DepartmentsApi
+ */
+export interface DepartmentsApiInterface {
+    /**
+     * Use this method to get list of all departments
+     * @summary Provide the list of all departments
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DepartmentsApiInterface
+     */
+    getDepartments(options?: AxiosRequestConfig): AxiosPromise<Array<Department>>;
+
+    /**
+     * Use this method to get list of all doctors with their department
+     * @summary Provide list of all doctors
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DepartmentsApiInterface
+     */
+    getDoctors(options?: AxiosRequestConfig): AxiosPromise<Array<Doctor>>;
+
+}
+
+/**
+ * DepartmentsApi - object-oriented interface
+ * @export
+ * @class DepartmentsApi
+ * @extends {BaseAPI}
+ */
+export class DepartmentsApi extends BaseAPI implements DepartmentsApiInterface {
+    /**
+     * Use this method to get list of all departments
+     * @summary Provide the list of all departments
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DepartmentsApi
+     */
+    public getDepartments(options?: AxiosRequestConfig) {
+        return DepartmentsApiFp(this.configuration).getDepartments(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to get list of all doctors with their department
+     * @summary Provide list of all doctors
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DepartmentsApi
+     */
+    public getDoctors(options?: AxiosRequestConfig) {
+        return DepartmentsApiFp(this.configuration).getDoctors(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 /**
  * RoomReservationApi - axios parameter creator
@@ -95,7 +329,7 @@ export const RoomReservationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getReservations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Reservation>>> {
+        async getReservations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RoomReservation>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getReservations(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -115,7 +349,7 @@ export const RoomReservationApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReservations(options?: any): AxiosPromise<Array<Reservation>> {
+        getReservations(options?: any): AxiosPromise<Array<RoomReservation>> {
             return localVarFp.getReservations(options).then((request) => request(axios, basePath));
         },
     };
@@ -134,7 +368,7 @@ export interface RoomReservationApiInterface {
      * @throws {RequiredError}
      * @memberof RoomReservationApiInterface
      */
-    getReservations(options?: AxiosRequestConfig): AxiosPromise<Array<Reservation>>;
+    getReservations(options?: AxiosRequestConfig): AxiosPromise<Array<RoomReservation>>;
 
 }
 

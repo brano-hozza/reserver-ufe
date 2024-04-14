@@ -3,7 +3,7 @@ servers:
   - description: Cluster Endpoint
     url: /api
 info:
-  description: Room reservation management for Web-In-Cloud system
+  description: Room and ambulance reservation management for Web-In-Cloud system
   version: "1.0.0"
   title: Reserver Api
   contact:
@@ -12,49 +12,177 @@ info:
     name: CC BY 4.0
     url: "https://creativecommons.org/licenses/by/4.0/"
 tags:
+  - name: ambulanceReservation
+    description: Ambulance reservation API
   - name: roomReservation
     description: Room reservation API
+  - name: departments
+    description: Departments API
 paths:
- "/reservation":
-  get: 
-    tags:
-      - roomReservation
-    summary: Provides the list of current reservations
-    operationId: getReservations
-    description: Use this method to get list of all reservations
-    responses:
-      "200":
-        description: value of the reservations
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Reservation"
-            examples:
-              response:
-                $ref: "#/components/examples/ReservationListExample"
+  "/departments":
+    get:
+      tags:
+        - departments
+      summary: Provide the list of all departments
+      operationId: getDepartments
+      description: Use this method to get list of all departments
+      responses:
+        "200":
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Department"
+              examples:
+                response:
+                  $ref: "#/components/examples/DepartmentListExample"
+  "/doctors":
+    get: 
+      tags:
+        - departments
+      summary: Provide list of all doctors
+      operationId: getDoctors
+      description: Use this method to get list of all doctors with their department
+      responses:
+        "200":
+          description: List of doctors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Doctor"
+              examples:
+                response:
+                  $ref: "#/components/examples/DoctorListExample"
+
+  
+  "/reservation":
+    get: 
+      tags:
+        - roomReservation
+      summary: Provides the list of current reservations
+      operationId: getReservations
+      description: Use this method to get list of all reservations
+      responses:
+        "200":
+          description: value of the reservations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoomReservation"
+              examples:
+                response:
+                  $ref: "#/components/examples/RoomReservationListExample"
 
 components:
   schemas:
-   Reservation:
+    Department:
       type: object
-      required: [ "id", "roomNumber"]
+      required: ["id", "name"]
+      example: 
+        $ref: "#/components/examples/DepartmentExample"
       properties:
         id:
           type: string
-          example: random-string
+          example: 14d43cef-9f78-43c6-9eaa-0138f8ab4a2e
+          description: Unique identifier of the department
+        name:
+          type: string
+          example: Gastro-entrology
+          description: Name of the hospital department
+        description:
+          type: string
+          example: This is some long description
+          description: Description of the department
+
+    Doctor:
+      type: object
+      required: ["id", "name", "department"]
+      example: 
+        $ref: "#/components/examples/DoctorExample"
+      properties:
+        id:
+          type: string
+          example: 1556c334-29cc-457c-814f-1fe4c66f3244
+          description: Unique identifier of the department
+        name:
+          type: string
+          example: Gastro-entrology
+          description: Name of the hospital department
+        department:
+          type: string
+          example: 7b58b99c-f963-4e2a-981a-423b13885fb5
+          description: ID of their department
+
+    RoomReservation:
+      type: object
+      required: [ "id", "roomNumber", "department", "doctor"]
+      example: 
+        $ref: "#/components/examples/RoomReservationExample"
+      properties:
+        id:
+          type: string
+          example: 62b344fc-96ea-479b-859e-1f506799c96c
           description: Unique identifier of the reservation
         roomNumber:
           type: string
           example: 356 - 3.posch
+
   examples:
-    ReservationListExample:
-      summary: List of room reservations
-      description: |
-        Example list of room reservations in the hospital
+    DepartmentExample:
+      summary: Single department example
+      description: Example of department
       value:
-        - id: asdasd
+        id: 55469995-4445-471e-b174-6400fe3e369f
+        name: Gastro-entrology
+        description: Cool department
+
+    DepartmentListExample:
+      summary: List of departments
+      description: Example list of departments
+      value:
+        - id: f24639a5-607c-41b1-83a7-d3df95bcdcfe
+          name: Gastro-entrology
+          description: Cool department
+        - id: 64cc0a2b-553c-4cf5-8188-9d9740706397
+          name: Chirurgy
+
+    DoctorExample:
+      summary: Single doctor example
+      description: Example of doctor
+      value:
+        id: random-id-1
+        name: Dr. Bobula Drefko
+        department: 567764d5-b21f-4e48-8249-19bda23e03be
+
+    DoctorListExample:
+      summary: List of doctors
+      description: Example list of doctors
+      value:
+        - id: 3942e34a-8b7f-402b-b583-eaaa8e9df0b0
+          name: Dr. Bobula Drefko
+          department: 0ed457e0-7e1a-4fb8-8606-b2a5b46b86da
+        - id: 13d7da9c-36d6-42e2-bd78-b42a0bfd5644
+          name: Dr. Pan Dreveny
+          department: cb5a1c9c-9ac7-4795-b6e8-55472ebd62c3
+
+    RoomReservationExample:
+      summary: Room reservation example
+      description: Example of room reservation
+      value:
+        id: 276cea02-5c2f-4d3f-bf29-c0c5436141a0
+        roomNumber: "12 - 1.posch"
+
+    RoomReservationListExample:
+      summary: List of room reservations
+      description: Example list of room reservations in the hospital
+      value:
+        - id: 7fbf5ff4-f00a-4257-be0c-6f1289a71b8f
           roomNumber: "12 - 1.posch"
-        - id: dsadsa
+        - id: b48e4581-f8e8-402e-a765-9c2e9f3fe32b
           roomNumber: "1 - 2.posch"

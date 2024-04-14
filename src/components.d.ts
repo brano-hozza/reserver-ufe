@@ -10,10 +10,17 @@ export namespace Components {
         "apiBase": string;
         "basePath": string;
     }
+    interface ReserverHome {
+    }
     interface ReserverReservationEditor {
     }
     interface ReserverRoomList {
+        "apiBase": string;
     }
+}
+export interface ReserverHomeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLReserverHomeElement;
 }
 export interface ReserverReservationEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -29,6 +36,23 @@ declare global {
     var HTMLReserverAppElement: {
         prototype: HTMLReserverAppElement;
         new (): HTMLReserverAppElement;
+    };
+    interface HTMLReserverHomeElementEventMap {
+        "navigate": string;
+    }
+    interface HTMLReserverHomeElement extends Components.ReserverHome, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLReserverHomeElementEventMap>(type: K, listener: (this: HTMLReserverHomeElement, ev: ReserverHomeCustomEvent<HTMLReserverHomeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLReserverHomeElementEventMap>(type: K, listener: (this: HTMLReserverHomeElement, ev: ReserverHomeCustomEvent<HTMLReserverHomeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLReserverHomeElement: {
+        prototype: HTMLReserverHomeElement;
+        new (): HTMLReserverHomeElement;
     };
     interface HTMLReserverReservationEditorElementEventMap {
         "back": string;
@@ -49,6 +73,7 @@ declare global {
     };
     interface HTMLReserverRoomListElementEventMap {
         "edit": string;
+        "back": void;
     }
     interface HTMLReserverRoomListElement extends Components.ReserverRoomList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLReserverRoomListElementEventMap>(type: K, listener: (this: HTMLReserverRoomListElement, ev: ReserverRoomListCustomEvent<HTMLReserverRoomListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -66,6 +91,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "reserver-app": HTMLReserverAppElement;
+        "reserver-home": HTMLReserverHomeElement;
         "reserver-reservation-editor": HTMLReserverReservationEditorElement;
         "reserver-room-list": HTMLReserverRoomListElement;
     }
@@ -75,14 +101,20 @@ declare namespace LocalJSX {
         "apiBase"?: string;
         "basePath"?: string;
     }
+    interface ReserverHome {
+        "onNavigate"?: (event: ReserverHomeCustomEvent<string>) => void;
+    }
     interface ReserverReservationEditor {
         "onBack"?: (event: ReserverReservationEditorCustomEvent<string>) => void;
     }
     interface ReserverRoomList {
+        "apiBase"?: string;
+        "onBack"?: (event: ReserverRoomListCustomEvent<void>) => void;
         "onEdit"?: (event: ReserverRoomListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
         "reserver-app": ReserverApp;
+        "reserver-home": ReserverHome;
         "reserver-reservation-editor": ReserverReservationEditor;
         "reserver-room-list": ReserverRoomList;
     }
@@ -92,6 +124,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "reserver-app": LocalJSX.ReserverApp & JSXBase.HTMLAttributes<HTMLReserverAppElement>;
+            "reserver-home": LocalJSX.ReserverHome & JSXBase.HTMLAttributes<HTMLReserverHomeElement>;
             "reserver-reservation-editor": LocalJSX.ReserverReservationEditor & JSXBase.HTMLAttributes<HTMLReserverReservationEditorElement>;
             "reserver-room-list": LocalJSX.ReserverRoomList & JSXBase.HTMLAttributes<HTMLReserverRoomListElement>;
         }
