@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import type { JSX } from '@stencil/core/internal';
 import { RoomReservation, RoomReservationApiFactory } from '../../api/reserver';
-import { JSX } from '@stencil/core/internal';
 
 @Component({
   tag: 'reserver-room-list',
@@ -39,7 +39,7 @@ export class ReserverRoomList {
 
   displayReservations(): JSX.Element[] {
     return this.reservations.map((reservation) => (
-      <md-list-item> 
+      <md-list-item>
           <md-icon slot="start">home_health</md-icon>
           <div slot="headline">
             Room {reservation.roomNumber}
@@ -55,6 +55,7 @@ export class ReserverRoomList {
     return (
       <Host>
         Room list
+
         <md-list>
           {this.displayReservations()}
         </md-list>

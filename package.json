@@ -34,7 +34,7 @@
   "dependencies": {
     "@material/web": "^1.2.0",
     "@stencil/core": "^4.7.0",
-    "axios": "^1.6.0"
+    "axios": "1.6.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.9",

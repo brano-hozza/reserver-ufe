@@ -1,5 +1,43 @@
+import { newSpecPage } from '@stencil/core/testing';
+import { ReserverRoomList } from '../reserver-room-list';
+
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { RoomReservation } from '../../../api/reserver';
+
 describe('reserver-room-list', () => {
-  it('renders', async () => {
-    expect(1).toEqual(1);
+  const sampleEntries: RoomReservation[] = [
+    {
+      id: 'entry-1',
+      roomNumber: '1',
+    },
+    {
+      id: 'entry-2',
+      roomNumber: '2',
+    },
+  ];
+  let mock: MockAdapter;
+
+  beforeAll(() => {
+    mock = new MockAdapter(axios);
+  });
+  afterEach(() => {
+    mock.reset();
+  });
+
+  it('renders samples', async () => {
+    mock.onGet().reply(200, sampleEntries);
+
+    const page = await newSpecPage({
+      components: [ReserverRoomList],
+      html: `<reserver-room-list api-base="http://test/api"></reserver-room-list>`,
+    });
+
+    const wlList = page.rootInstance as ReserverRoomList;
+    const expectedRooms = wlList?.reservations?.length;
+
+    const items = page.root.shadowRoot.querySelectorAll('md-list-item');
+    expect(expectedRooms).toEqual(sampleEntries.length);
+    expect(items.length).toEqual(expectedRooms);
   })
 });

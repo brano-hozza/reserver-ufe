@@ -45,7 +45,6 @@ export class ReserverApp {
 
     let pageType: CurrentPage = '';
     let entityId = '@new'
-    console.log(this.relativePath)
     if (this.relativePath === 'list') {
       pageType = 'list';
     } else if (this.relativePath.startsWith('reservation/')) {

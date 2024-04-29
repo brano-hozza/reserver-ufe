@@ -39,7 +39,7 @@ paths:
                 response:
                   $ref: "#/components/examples/DepartmentListExample"
   "/doctors":
-    get: 
+    get:
       tags:
         - departments
       summary: Provide list of all doctors
@@ -57,10 +57,8 @@ paths:
               examples:
                 response:
                   $ref: "#/components/examples/DoctorListExample"
-
-  
   "/reservation":
-    get: 
+    get:
       tags:
         - roomReservation
       summary: Provides the list of current reservations
@@ -84,7 +82,7 @@ components:
     Department:
       type: object
       required: ["id", "name"]
-      example: 
+      example:
         $ref: "#/components/examples/DepartmentExample"
       properties:
         id:
@@ -103,7 +101,7 @@ components:
     Doctor:
       type: object
       required: ["id", "name", "department"]
-      example: 
+      example:
         $ref: "#/components/examples/DoctorExample"
       properties:
         id:
@@ -122,7 +120,7 @@ components:
     RoomReservation:
       type: object
       required: [ "id", "roomNumber", "department", "doctor"]
-      example: 
+      example:
         $ref: "#/components/examples/RoomReservationExample"
       properties:
         id:
