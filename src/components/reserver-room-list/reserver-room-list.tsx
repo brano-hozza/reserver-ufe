@@ -16,7 +16,7 @@ export class ReserverRoomList {
   @Prop() apiBase: string;
 
   // State
-  @State() errorMessage: string;
+  @State() errorMessages: string[] = [];
 
   reservations: RoomReservation[];
 
@@ -26,10 +26,10 @@ export class ReserverRoomList {
       if (response.status < 299) {
         return response.data;
       } else {
-        this.errorMessage = `Cannot retrieve list of waiting patients: ${response.statusText}`;
+        this.errorMessages.push(`Cannot retrieve list of waiting patients: ${response.statusText}`);
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || 'unknown'}`;
+      this.errorMessages.push(`Cannot retrieve list of waiting patients: ${err.message || 'unknown'}`);
     }
     return [];
   }
@@ -63,7 +63,7 @@ export class ReserverRoomList {
             Back to home
           </button>
         </div>
-        <md-list>{this.displayReservations()}</md-list>
+        {this.errorMessages.length > 0 ? this.errorMessages.map(e => <div part="error-message">{e}</div>) : <md-list>{this.displayReservations()}</md-list>}
         <button id="new-reservation-button" onClick={() => this.navigate.emit('reservation/@new')}>
           New reservation
         </button>
