@@ -57,6 +57,25 @@ paths:
               examples:
                 response:
                   $ref: "#/components/examples/DoctorListExample"
+  "/rooms":
+    get:
+      tags:
+        - roomReservation
+      summary: Provides the list of all rooms
+      operationId: getRooms
+      description: Use this method to get list of all rooms
+      responses:
+        "200":
+          description: List of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Room"
+              examples:
+                response:
+                  $ref: "#/components/examples/RoomListExample"
   "/reservation":
     get:
       tags:
@@ -76,7 +95,103 @@ paths:
               examples:
                 response:
                   $ref: "#/components/examples/RoomReservationListExample"
-
+    post:
+      tags:
+        - roomReservation
+      summary: Create new reservation
+      operationId: createReservation
+      description: Use this method to create new reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomReservation"
+      responses:
+        "201":
+          description: Reservation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomReservation"
+              examples:
+                response:
+                  $ref: "#/components/examples/RoomReservationExample"
+  "/reservation/{id}":
+    get:
+      tags:
+        - roomReservation
+      summary: Provides the reservation by id
+      operationId: getReservationById
+      description: Use this method to get reservation by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reservation
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: value of the reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomReservation"
+              examples:
+                response:
+                  $ref: "#/components/examples/RoomReservationExample"
+        "404":
+          description: Reservation not found
+    put:
+      tags:
+        - roomReservation
+      summary: Update reservation
+      operationId: updateReservation
+      description: Use this method to update reservation
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reservation
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomReservation"
+      responses:
+        "200":
+          description: Reservation updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomReservation"
+              examples:
+                response:
+                  $ref: "#/components/examples/RoomReservationExample"
+        "404":
+          description: Reservation not found
+    delete:
+      tags:
+        - roomReservation
+      summary: Delete reservation
+      operationId: deleteReservation
+      description: Use this method to delete reservation
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reservation
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Reservation deleted
+        "404":
+          description: Reservation not found
 components:
   schemas:
     Department:
@@ -87,7 +202,7 @@ components:
       properties:
         id:
           type: string
-          example: 14d43cef-9f78-43c6-9eaa-0138f8ab4a2e
+          example: deparment-id-1
           description: Unique identifier of the department
         name:
           type: string
@@ -106,7 +221,7 @@ components:
       properties:
         id:
           type: string
-          example: 1556c334-29cc-457c-814f-1fe4c66f3244
+          example: doctor-id-1
           description: Unique identifier of the department
         name:
           type: string
@@ -114,29 +229,50 @@ components:
           description: Name of the hospital department
         department:
           type: string
-          example: 7b58b99c-f963-4e2a-981a-423b13885fb5
+          example: department-id-1
           description: ID of their department
 
     RoomReservation:
       type: object
-      required: [ "id", "roomNumber", "department", "doctor"]
+      required: [ "id", "room", "department", "doctor"]
       example:
         $ref: "#/components/examples/RoomReservationExample"
       properties:
         id:
           type: string
-          example: 62b344fc-96ea-479b-859e-1f506799c96c
+          example: reservation-id-1
           description: Unique identifier of the reservation
+        room:
+          type: string
+          example: room-id-1
+          description: Room ID
+        department:
+          type: string
+          example: department-id-1
+          description: ID of the department
+        doctor:
+          type: string
+          example: doctor-id-1
+          description: ID of the doctor
+    Room:
+      type: object
+      required: ["id", "roomNumber"]
+      properties:
+        id:
+          type: string
+          example: room-id-1
+          description: Unique identifier of the room
         roomNumber:
           type: string
           example: 356 - 3.posch
+          description: Room number
 
   examples:
     DepartmentExample:
       summary: Single department example
       description: Example of department
       value:
-        id: 55469995-4445-471e-b174-6400fe3e369f
+        id: deparment-id-1
         name: Gastro-entrology
         description: Cool department
 
@@ -144,43 +280,67 @@ components:
       summary: List of departments
       description: Example list of departments
       value:
-        - id: f24639a5-607c-41b1-83a7-d3df95bcdcfe
+        - id: deparment-id-1
           name: Gastro-entrology
           description: Cool department
-        - id: 64cc0a2b-553c-4cf5-8188-9d9740706397
+        - id: deparment-id-2
           name: Chirurgy
 
     DoctorExample:
       summary: Single doctor example
       description: Example of doctor
       value:
-        id: random-id-1
+        id: doctor-id-1
         name: Dr. Bobula Drefko
-        department: 567764d5-b21f-4e48-8249-19bda23e03be
+        department: deparment-id-1
 
     DoctorListExample:
       summary: List of doctors
       description: Example list of doctors
       value:
-        - id: 3942e34a-8b7f-402b-b583-eaaa8e9df0b0
+        - id: doctor-id-1
           name: Dr. Bobula Drefko
-          department: 0ed457e0-7e1a-4fb8-8606-b2a5b46b86da
-        - id: 13d7da9c-36d6-42e2-bd78-b42a0bfd5644
+          department: deparment-id-1
+        - id: doctor-id-2
           name: Dr. Pan Dreveny
-          department: cb5a1c9c-9ac7-4795-b6e8-55472ebd62c3
+          department: deparment-id-1
+        - id: doctor-id-3
+          name: Dr. Jozef Kukumberg
+          department: deparment-id-2
 
     RoomReservationExample:
       summary: Room reservation example
       description: Example of room reservation
       value:
-        id: 276cea02-5c2f-4d3f-bf29-c0c5436141a0
-        roomNumber: "12 - 1.posch"
+        id: reservation-id-1
+        room: room-id-1
+        department: deparment-id-1
+        doctor: doctor-id-1
 
     RoomReservationListExample:
       summary: List of room reservations
       description: Example list of room reservations in the hospital
       value:
-        - id: 7fbf5ff4-f00a-4257-be0c-6f1289a71b8f
-          roomNumber: "12 - 1.posch"
-        - id: b48e4581-f8e8-402e-a765-9c2e9f3fe32b
-          roomNumber: "1 - 2.posch"
+        - id: reservation-id-1
+          room: room-id-1
+          department: deparment-id-1
+          doctor: doctor-id-1
+        - id: reservation-id-2
+          room: room-id-2
+          department: deparment-id-1
+          doctor: doctor-id-2
+    RoomExample:
+      summary: Single room example
+      description: Example of room
+      value:
+        id: room-id-1
+        roomNumber: 356 - 3.posch
+    RoomListExample:
+      summary: List of rooms
+      description: Example list of rooms in the hospital
+      value:
+        - id: room-id-1
+          roomNumber: 356 - 3.posch
+        - id: room-id-2
+          roomNumber: 356 - 2.posch
+

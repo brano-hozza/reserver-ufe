@@ -76,6 +76,25 @@ export interface Doctor {
 /**
  * 
  * @export
+ * @interface Room
+ */
+export interface Room {
+    /**
+     * Unique identifier of the room
+     * @type {string}
+     * @memberof Room
+     */
+    'id': string;
+    /**
+     * Room number
+     * @type {string}
+     * @memberof Room
+     */
+    'roomNumber': string;
+}
+/**
+ * 
+ * @export
  * @interface RoomReservation
  */
 export interface RoomReservation {
@@ -86,11 +105,23 @@ export interface RoomReservation {
      */
     'id': string;
     /**
-     * 
+     * Room ID
      * @type {string}
      * @memberof RoomReservation
      */
-    'roomNumber': string;
+    'room': string;
+    /**
+     * ID of the department
+     * @type {string}
+     * @memberof RoomReservation
+     */
+    'department': string;
+    /**
+     * ID of the doctor
+     * @type {string}
+     * @memberof RoomReservation
+     */
+    'doctor': string;
 }
 
 /**
@@ -284,6 +315,110 @@ export class DepartmentsApi extends BaseAPI implements DepartmentsApiInterface {
 export const RoomReservationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Use this method to create new reservation
+         * @summary Create new reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReservation: async (roomReservation: RoomReservation, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomReservation' is not null or undefined
+            assertParamExists('createReservation', 'roomReservation', roomReservation)
+            const localVarPath = `/reservation`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(roomReservation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to delete reservation
+         * @summary Delete reservation
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteReservation: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteReservation', 'id', id)
+            const localVarPath = `/reservation/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to get reservation by id
+         * @summary Provides the reservation by id
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReservationById: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getReservationById', 'id', id)
+            const localVarPath = `/reservation/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Use this method to get list of all reservations
          * @summary Provides the list of current reservations
          * @param {*} [options] Override http request option.
@@ -313,6 +448,76 @@ export const RoomReservationApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Use this method to get list of all rooms
+         * @summary Provides the list of all rooms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRooms: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/rooms`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to update reservation
+         * @summary Update reservation
+         * @param {string} id ID of the reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReservation: async (id: string, roomReservation: RoomReservation, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateReservation', 'id', id)
+            // verify required parameter 'roomReservation' is not null or undefined
+            assertParamExists('updateReservation', 'roomReservation', roomReservation)
+            const localVarPath = `/reservation/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(roomReservation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -324,6 +529,39 @@ export const RoomReservationApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RoomReservationApiAxiosParamCreator(configuration)
     return {
         /**
+         * Use this method to create new reservation
+         * @summary Create new reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createReservation(roomReservation: RoomReservation, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomReservation>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createReservation(roomReservation, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to delete reservation
+         * @summary Delete reservation
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteReservation(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteReservation(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to get reservation by id
+         * @summary Provides the reservation by id
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReservationById(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomReservation>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReservationById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Use this method to get list of all reservations
          * @summary Provides the list of current reservations
          * @param {*} [options] Override http request option.
@@ -331,6 +569,28 @@ export const RoomReservationApiFp = function(configuration?: Configuration) {
          */
         async getReservations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RoomReservation>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getReservations(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to get list of all rooms
+         * @summary Provides the list of all rooms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRooms(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Room>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRooms(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to update reservation
+         * @summary Update reservation
+         * @param {string} id ID of the reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateReservation(id: string, roomReservation: RoomReservation, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomReservation>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateReservation(id, roomReservation, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -344,6 +604,36 @@ export const RoomReservationApiFactory = function (configuration?: Configuration
     const localVarFp = RoomReservationApiFp(configuration)
     return {
         /**
+         * Use this method to create new reservation
+         * @summary Create new reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createReservation(roomReservation: RoomReservation, options?: any): AxiosPromise<RoomReservation> {
+            return localVarFp.createReservation(roomReservation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to delete reservation
+         * @summary Delete reservation
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteReservation(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteReservation(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to get reservation by id
+         * @summary Provides the reservation by id
+         * @param {string} id ID of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReservationById(id: string, options?: any): AxiosPromise<RoomReservation> {
+            return localVarFp.getReservationById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Use this method to get list of all reservations
          * @summary Provides the list of current reservations
          * @param {*} [options] Override http request option.
@@ -351,6 +641,26 @@ export const RoomReservationApiFactory = function (configuration?: Configuration
          */
         getReservations(options?: any): AxiosPromise<Array<RoomReservation>> {
             return localVarFp.getReservations(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to get list of all rooms
+         * @summary Provides the list of all rooms
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRooms(options?: any): AxiosPromise<Array<Room>> {
+            return localVarFp.getRooms(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to update reservation
+         * @summary Update reservation
+         * @param {string} id ID of the reservation
+         * @param {RoomReservation} roomReservation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateReservation(id: string, roomReservation: RoomReservation, options?: any): AxiosPromise<RoomReservation> {
+            return localVarFp.updateReservation(id, roomReservation, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -362,6 +672,36 @@ export const RoomReservationApiFactory = function (configuration?: Configuration
  */
 export interface RoomReservationApiInterface {
     /**
+     * Use this method to create new reservation
+     * @summary Create new reservation
+     * @param {RoomReservation} roomReservation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApiInterface
+     */
+    createReservation(roomReservation: RoomReservation, options?: AxiosRequestConfig): AxiosPromise<RoomReservation>;
+
+    /**
+     * Use this method to delete reservation
+     * @summary Delete reservation
+     * @param {string} id ID of the reservation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApiInterface
+     */
+    deleteReservation(id: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * Use this method to get reservation by id
+     * @summary Provides the reservation by id
+     * @param {string} id ID of the reservation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApiInterface
+     */
+    getReservationById(id: string, options?: AxiosRequestConfig): AxiosPromise<RoomReservation>;
+
+    /**
      * Use this method to get list of all reservations
      * @summary Provides the list of current reservations
      * @param {*} [options] Override http request option.
@@ -369,6 +709,26 @@ export interface RoomReservationApiInterface {
      * @memberof RoomReservationApiInterface
      */
     getReservations(options?: AxiosRequestConfig): AxiosPromise<Array<RoomReservation>>;
+
+    /**
+     * Use this method to get list of all rooms
+     * @summary Provides the list of all rooms
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApiInterface
+     */
+    getRooms(options?: AxiosRequestConfig): AxiosPromise<Array<Room>>;
+
+    /**
+     * Use this method to update reservation
+     * @summary Update reservation
+     * @param {string} id ID of the reservation
+     * @param {RoomReservation} roomReservation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApiInterface
+     */
+    updateReservation(id: string, roomReservation: RoomReservation, options?: AxiosRequestConfig): AxiosPromise<RoomReservation>;
 
 }
 
@@ -380,6 +740,42 @@ export interface RoomReservationApiInterface {
  */
 export class RoomReservationApi extends BaseAPI implements RoomReservationApiInterface {
     /**
+     * Use this method to create new reservation
+     * @summary Create new reservation
+     * @param {RoomReservation} roomReservation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApi
+     */
+    public createReservation(roomReservation: RoomReservation, options?: AxiosRequestConfig) {
+        return RoomReservationApiFp(this.configuration).createReservation(roomReservation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to delete reservation
+     * @summary Delete reservation
+     * @param {string} id ID of the reservation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApi
+     */
+    public deleteReservation(id: string, options?: AxiosRequestConfig) {
+        return RoomReservationApiFp(this.configuration).deleteReservation(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to get reservation by id
+     * @summary Provides the reservation by id
+     * @param {string} id ID of the reservation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApi
+     */
+    public getReservationById(id: string, options?: AxiosRequestConfig) {
+        return RoomReservationApiFp(this.configuration).getReservationById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Use this method to get list of all reservations
      * @summary Provides the list of current reservations
      * @param {*} [options] Override http request option.
@@ -388,6 +784,30 @@ export class RoomReservationApi extends BaseAPI implements RoomReservationApiInt
      */
     public getReservations(options?: AxiosRequestConfig) {
         return RoomReservationApiFp(this.configuration).getReservations(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to get list of all rooms
+     * @summary Provides the list of all rooms
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApi
+     */
+    public getRooms(options?: AxiosRequestConfig) {
+        return RoomReservationApiFp(this.configuration).getRooms(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to update reservation
+     * @summary Update reservation
+     * @param {string} id ID of the reservation
+     * @param {RoomReservation} roomReservation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomReservationApi
+     */
+    public updateReservation(id: string, roomReservation: RoomReservation, options?: AxiosRequestConfig) {
+        return RoomReservationApiFp(this.configuration).updateReservation(id, roomReservation, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

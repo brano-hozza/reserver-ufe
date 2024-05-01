@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import type { JSX } from '@stencil/core/internal';
 import { RoomReservation, RoomReservationApiFactory } from '../../api/reserver';
+import { RouterPage } from '../../types';
 
 @Component({
   tag: 'reserver-room-list',
@@ -8,10 +9,15 @@ import { RoomReservation, RoomReservationApiFactory } from '../../api/reserver';
   shadow: true,
 })
 export class ReserverRoomList {
-  @Event() edit: EventEmitter<string>;
-  @Event() back: EventEmitter<void>;
+  // Events
+  @Event() navigate: EventEmitter<string>;
+
+  // Properties
   @Prop() apiBase: string;
+
+  // State
   @State() errorMessage: string;
+
   reservations: RoomReservation[];
 
   private async getReservationsAsync() {
@@ -32,21 +38,18 @@ export class ReserverRoomList {
     this.reservations = await this.getReservationsAsync();
   }
 
-  private  editReservation(id: string) {
-    console.log(`Editing reservation ${id}`)
-    this.edit.emit(id);
+  private editReservation(id: string) {
+    this.navigate.emit(`reservation/${id}`);
   }
 
   displayReservations(): JSX.Element[] {
-    return this.reservations.map((reservation) => (
+    return this.reservations.map(reservation => (
       <md-list-item>
-          <md-icon slot="start">home_health</md-icon>
-          <div slot="headline">
-            Room {reservation.roomNumber}
-          </div>
-          <md-icon style={{cursor: 'pointer'}} slot="end" onClick={() => this.editReservation(reservation.id)}>
-            edit
-          </md-icon >
+        <md-icon slot="start">home_health</md-icon>
+        <div slot="headline">Room {reservation.room}</div>
+        <md-icon style={{ cursor: 'pointer' }} slot="end" onClick={() => this.editReservation(reservation.id)}>
+          edit
+        </md-icon>
       </md-list-item>
     ));
   }
@@ -54,14 +57,17 @@ export class ReserverRoomList {
   render() {
     return (
       <Host>
-        Room list
-
-        <md-list>
-          {this.displayReservations()}
-        </md-list>
-        <button onClick={() => this.back.emit()}>Back</button>
+        <div part="header">
+          <h2>Room list</h2>
+          <button id="navigation-button" onClick={() => this.navigate.emit(RouterPage.HOME)}>
+            Back to home
+          </button>
+        </div>
+        <md-list>{this.displayReservations()}</md-list>
+        <button id="new-reservation-button" onClick={() => this.navigate.emit('reservation/@new')}>
+          New reservation
+        </button>
       </Host>
     );
   }
-
 }

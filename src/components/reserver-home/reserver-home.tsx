@@ -14,12 +14,11 @@ export class ReserverHome {
         <div id="menu">
           <span id="title">Reserver app</span>
           <div id="menu-items">
-            <span onClick={() => this.navigate.emit('./list')}>Room reservation</span>
-            <span onClick={() => this.navigate.emit('./department')}>Department reservation</span>
+            <span onClick={() => this.navigate.emit('./reservations')}>Room reservation</span>
+            <span onClick={() => this.navigate.emit('./examination')}>Examination reservation</span>
           </div>
         </div>
       </Host>
     );
   }
-
 }

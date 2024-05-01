@@ -13,6 +13,8 @@ export namespace Components {
     interface ReserverHome {
     }
     interface ReserverReservationEditor {
+        "apiBase": string;
+        "entityId": string;
     }
     interface ReserverRoomList {
         "apiBase": string;
@@ -55,7 +57,7 @@ declare global {
         new (): HTMLReserverHomeElement;
     };
     interface HTMLReserverReservationEditorElementEventMap {
-        "back": string;
+        "navigate": string;
     }
     interface HTMLReserverReservationEditorElement extends Components.ReserverReservationEditor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLReserverReservationEditorElementEventMap>(type: K, listener: (this: HTMLReserverReservationEditorElement, ev: ReserverReservationEditorCustomEvent<HTMLReserverReservationEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -72,8 +74,7 @@ declare global {
         new (): HTMLReserverReservationEditorElement;
     };
     interface HTMLReserverRoomListElementEventMap {
-        "edit": string;
-        "back": void;
+        "navigate": string;
     }
     interface HTMLReserverRoomListElement extends Components.ReserverRoomList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLReserverRoomListElementEventMap>(type: K, listener: (this: HTMLReserverRoomListElement, ev: ReserverRoomListCustomEvent<HTMLReserverRoomListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -105,12 +106,13 @@ declare namespace LocalJSX {
         "onNavigate"?: (event: ReserverHomeCustomEvent<string>) => void;
     }
     interface ReserverReservationEditor {
-        "onBack"?: (event: ReserverReservationEditorCustomEvent<string>) => void;
+        "apiBase"?: string;
+        "entityId"?: string;
+        "onNavigate"?: (event: ReserverReservationEditorCustomEvent<string>) => void;
     }
     interface ReserverRoomList {
         "apiBase"?: string;
-        "onBack"?: (event: ReserverRoomListCustomEvent<void>) => void;
-        "onEdit"?: (event: ReserverRoomListCustomEvent<string>) => void;
+        "onNavigate"?: (event: ReserverRoomListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
         "reserver-app": ReserverApp;

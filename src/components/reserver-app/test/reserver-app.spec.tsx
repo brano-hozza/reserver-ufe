@@ -29,7 +29,7 @@ describe('reserver-app', () => {
 
   it('renders list', async () => {
     const page = await newSpecPage({
-      url: `http://localhost/list`,
+      url: `http://localhost/reservations`,
       components: [ReserverApp],
       html: `<reserver-app base-path="/"></reserver-app>`,
     });

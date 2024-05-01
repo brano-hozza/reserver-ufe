@@ -9,11 +9,15 @@ describe('reserver-room-list', () => {
   const sampleEntries: RoomReservation[] = [
     {
       id: 'entry-1',
-      roomNumber: '1',
+      room: '1',
+      department: '1',
+      doctor: '1',
     },
     {
       id: 'entry-2',
-      roomNumber: '2',
+      room: '2',
+      department: '2',
+      doctor: '2',
     },
   ];
   let mock: MockAdapter;

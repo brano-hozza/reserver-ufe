@@ -1,6 +1,6 @@
 import { Component, Host, Prop, State, h } from '@stencil/core';
-
-type CurrentPage = ''| 'list' |'reservation-editor' //TODO: Add more pages
+import { RouterPage } from '../../types';
+import { getRoute } from '../../utils/utils';
 
 @Component({
   tag: 'reserver-app',
@@ -8,7 +8,8 @@ type CurrentPage = ''| 'list' |'reservation-editor' //TODO: Add more pages
   shadow: true,
 })
 export class ReserverApp {
-  @State() private relativePath = '';
+  @State() private page = RouterPage.HOME;
+  @State() private params: Record<string, string> = {};
 
   @Prop() basePath: string = '';
   @Prop() apiBase: string;
@@ -18,11 +19,14 @@ export class ReserverApp {
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
 
-    const toRelative = (path: string) => {
+    const setCurrentPage = (path: string) => {
       if (path.startsWith(baseUri)) {
-        this.relativePath = path.slice(baseUri.length);
+        const part = path.slice(baseUri.length);
+        const [page, params] = getRoute(part);
+        this.page = page;
+        this.params = params;
       } else {
-        this.relativePath = '';
+        this.page = RouterPage.HOME;
       }
     };
 
@@ -31,10 +35,10 @@ export class ReserverApp {
         (ev as any).intercept();
       }
       let path = new URL((ev as any).destination.url).pathname;
-      toRelative(path);
+      setCurrentPage(path);
     });
 
-    toRelative(location.pathname);
+    setCurrentPage(location.pathname);
   }
 
   render() {
@@ -43,24 +47,18 @@ export class ReserverApp {
       window.navigation.navigate(absolute);
     };
 
-    let pageType: CurrentPage = '';
-    let entityId = '@new'
-    if (this.relativePath === 'list') {
-      pageType = 'list';
-    } else if (this.relativePath.startsWith('reservation/')) {
-      pageType = 'reservation-editor';
-      entityId = this.relativePath.split('/')[1];
-    }
-
     let element: null | Element = null;
-    if(pageType === ''){
+    if(this.page === RouterPage.HOME){
+      console.log('Home');
       element = (<reserver-home onNavigate={(e) => navigate(e.detail)}></reserver-home>)
     }
-    else if( pageType === 'list'){
-      element = (<reserver-room-list apiBase={this.apiBase} onBack={() => navigate('/') } onEdit={(e: CustomEvent<string>) =>navigate('./reservation/'+e.detail)}></reserver-room-list>)
+    else if( this.page === RouterPage.RESERVATIONS){
+      console.log('Reservations');
+      element = (<reserver-room-list apiBase={this.apiBase} onNavigate={(e) => navigate(e.detail)}></reserver-room-list>)
     }
-    else if(pageType === 'reservation-editor'){
-      element = (<reserver-reservation-editor id={entityId} onBack={() => navigate('/')}></reserver-reservation-editor>)
+    else if(this.page === RouterPage.EDIT_RESERVATION){
+      console.log('Edit reservation', this.params['id']);
+      element = (<reserver-reservation-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={(e) => navigate(e.detail)}></reserver-reservation-editor>)
     }
 
     return (
