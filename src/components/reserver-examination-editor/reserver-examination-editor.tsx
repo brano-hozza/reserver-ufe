@@ -125,7 +125,7 @@ export class ReserverExaminationEditor {
     this.rooms = await this.getRooms();
     this.departments = await this.getDepartments();
     this.doctors = await this.getDoctors();
-    if (this.examination) {
+    if (this.examination && !this.isNew) {
       this.selectedRoom = this.examination.room;
       this.selectedDepartment = this.examination.department;
       this.selectedDoctor = this.examination.doctor;
