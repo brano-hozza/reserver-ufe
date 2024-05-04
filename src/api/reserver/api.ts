@@ -76,6 +76,49 @@ export interface Doctor {
 /**
  * 
  * @export
+ * @interface Examination
+ */
+export interface Examination {
+    /**
+     * Unique identifier of the examination
+     * @type {string}
+     * @memberof Examination
+     */
+    'id': string;
+    /**
+     * Room ID
+     * @type {string}
+     * @memberof Examination
+     */
+    'room': string;
+    /**
+     * ID of the department
+     * @type {string}
+     * @memberof Examination
+     */
+    'department': string;
+    /**
+     * ID of the doctor
+     * @type {string}
+     * @memberof Examination
+     */
+    'doctor': string;
+    /**
+     * Name of the patient
+     * @type {string}
+     * @memberof Examination
+     */
+    'patient': string;
+    /**
+     * Date and time of the examination
+     * @type {string}
+     * @memberof Examination
+     */
+    'datetime': string;
+}
+/**
+ * 
+ * @export
  * @interface Room
  */
 export interface Room {
@@ -304,6 +347,441 @@ export class DepartmentsApi extends BaseAPI implements DepartmentsApiInterface {
      */
     public getDoctors(options?: AxiosRequestConfig) {
         return DepartmentsApiFp(this.configuration).getDoctors(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ExaminationReservationApi - axios parameter creator
+ * @export
+ */
+export const ExaminationReservationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Use this method to create new examination
+         * @summary Create new examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExamination: async (examination: Examination, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examination' is not null or undefined
+            assertParamExists('createExamination', 'examination', examination)
+            const localVarPath = `/examination`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(examination, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to delete examination
+         * @summary Delete examination
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteExamination: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteExamination', 'id', id)
+            const localVarPath = `/examination/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to get examination by id
+         * @summary Provides the examination by id
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminationById: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getExaminationById', 'id', id)
+            const localVarPath = `/examination/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to get list of all examinations
+         * @summary Provides the list of current examinations
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminations: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/examination`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to update examination
+         * @summary Update examination
+         * @param {string} id ID of the examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateExamination: async (id: string, examination: Examination, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateExamination', 'id', id)
+            // verify required parameter 'examination' is not null or undefined
+            assertParamExists('updateExamination', 'examination', examination)
+            const localVarPath = `/examination/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(examination, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ExaminationReservationApi - functional programming interface
+ * @export
+ */
+export const ExaminationReservationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ExaminationReservationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Use this method to create new examination
+         * @summary Create new examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createExamination(examination: Examination, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Examination>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createExamination(examination, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to delete examination
+         * @summary Delete examination
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteExamination(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteExamination(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to get examination by id
+         * @summary Provides the examination by id
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getExaminationById(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Examination>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getExaminationById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to get list of all examinations
+         * @summary Provides the list of current examinations
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getExaminations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Examination>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getExaminations(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to update examination
+         * @summary Update examination
+         * @param {string} id ID of the examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateExamination(id: string, examination: Examination, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Examination>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateExamination(id, examination, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ExaminationReservationApi - factory interface
+ * @export
+ */
+export const ExaminationReservationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ExaminationReservationApiFp(configuration)
+    return {
+        /**
+         * Use this method to create new examination
+         * @summary Create new examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExamination(examination: Examination, options?: any): AxiosPromise<Examination> {
+            return localVarFp.createExamination(examination, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to delete examination
+         * @summary Delete examination
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteExamination(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteExamination(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to get examination by id
+         * @summary Provides the examination by id
+         * @param {string} id ID of the examination
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminationById(id: string, options?: any): AxiosPromise<Examination> {
+            return localVarFp.getExaminationById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to get list of all examinations
+         * @summary Provides the list of current examinations
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminations(options?: any): AxiosPromise<Array<Examination>> {
+            return localVarFp.getExaminations(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to update examination
+         * @summary Update examination
+         * @param {string} id ID of the examination
+         * @param {Examination} examination 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateExamination(id: string, examination: Examination, options?: any): AxiosPromise<Examination> {
+            return localVarFp.updateExamination(id, examination, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ExaminationReservationApi - interface
+ * @export
+ * @interface ExaminationReservationApi
+ */
+export interface ExaminationReservationApiInterface {
+    /**
+     * Use this method to create new examination
+     * @summary Create new examination
+     * @param {Examination} examination 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApiInterface
+     */
+    createExamination(examination: Examination, options?: AxiosRequestConfig): AxiosPromise<Examination>;
+
+    /**
+     * Use this method to delete examination
+     * @summary Delete examination
+     * @param {string} id ID of the examination
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApiInterface
+     */
+    deleteExamination(id: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * Use this method to get examination by id
+     * @summary Provides the examination by id
+     * @param {string} id ID of the examination
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApiInterface
+     */
+    getExaminationById(id: string, options?: AxiosRequestConfig): AxiosPromise<Examination>;
+
+    /**
+     * Use this method to get list of all examinations
+     * @summary Provides the list of current examinations
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApiInterface
+     */
+    getExaminations(options?: AxiosRequestConfig): AxiosPromise<Array<Examination>>;
+
+    /**
+     * Use this method to update examination
+     * @summary Update examination
+     * @param {string} id ID of the examination
+     * @param {Examination} examination 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApiInterface
+     */
+    updateExamination(id: string, examination: Examination, options?: AxiosRequestConfig): AxiosPromise<Examination>;
+
+}
+
+/**
+ * ExaminationReservationApi - object-oriented interface
+ * @export
+ * @class ExaminationReservationApi
+ * @extends {BaseAPI}
+ */
+export class ExaminationReservationApi extends BaseAPI implements ExaminationReservationApiInterface {
+    /**
+     * Use this method to create new examination
+     * @summary Create new examination
+     * @param {Examination} examination 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApi
+     */
+    public createExamination(examination: Examination, options?: AxiosRequestConfig) {
+        return ExaminationReservationApiFp(this.configuration).createExamination(examination, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to delete examination
+     * @summary Delete examination
+     * @param {string} id ID of the examination
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApi
+     */
+    public deleteExamination(id: string, options?: AxiosRequestConfig) {
+        return ExaminationReservationApiFp(this.configuration).deleteExamination(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to get examination by id
+     * @summary Provides the examination by id
+     * @param {string} id ID of the examination
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApi
+     */
+    public getExaminationById(id: string, options?: AxiosRequestConfig) {
+        return ExaminationReservationApiFp(this.configuration).getExaminationById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to get list of all examinations
+     * @summary Provides the list of current examinations
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApi
+     */
+    public getExaminations(options?: AxiosRequestConfig) {
+        return ExaminationReservationApiFp(this.configuration).getExaminations(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to update examination
+     * @summary Update examination
+     * @param {string} id ID of the examination
+     * @param {Examination} examination 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExaminationReservationApi
+     */
+    public updateExamination(id: string, examination: Examination, options?: AxiosRequestConfig) {
+        return ExaminationReservationApiFp(this.configuration).updateExamination(id, examination, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -26,10 +26,10 @@ export class ReserverRoomList {
       if (response.status < 299) {
         return response.data;
       } else {
-        this.errorMessages.push(`Cannot retrieve list of waiting patients: ${response.statusText}`);
+        this.errorMessages.push(`Cannot retrieve list of reservations: ${response.statusText}`);
       }
     } catch (err: any) {
-      this.errorMessages.push(`Cannot retrieve list of waiting patients: ${err.message || 'unknown'}`);
+      this.errorMessages.push(`Cannot retrieve list of reservations: ${err.message || 'unknown'}`);
     }
     return [];
   }

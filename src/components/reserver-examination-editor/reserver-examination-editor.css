@@ -1,0 +1,79 @@
+:host {
+  display: block;
+  w-full: 100%;
+}
+
+:host::part(header) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+:host::part(error-message) {
+  color: red;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  border: 1px solid red;
+  border-radius: 5px;
+  text-align: center;
+}
+
+:host::part(content) {
+  gap: 1rem;
+  padding: 1rem;
+}
+
+:host::part(loading) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+label input {
+  width: 100%;
+}
+
+label select {
+  width: 100%;
+}
+
+#navigation-button {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 0.5rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+#save-button {
+  background-color: lightblue;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 0.5rem;
+  height: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+#save-button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+#datetime {
+  display: flex;
+  gap: 1rem;
+}
+
+#date {
+  width: 30%;
+}
+
+#time {
+  width: 30%;
+}

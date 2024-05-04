@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+:host::part(header) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+#navigation-button {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 0.5rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+#new-examination-button {
+  background-color: lightblue;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 0.5rem;
+  height: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+  cursor: pointer;
+}

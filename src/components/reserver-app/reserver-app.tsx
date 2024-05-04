@@ -59,6 +59,12 @@ export class ReserverApp {
     else if(this.page === RouterPage.EDIT_RESERVATION){
       console.log('Edit reservation', this.params['id']);
       element = (<reserver-reservation-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={(e) => navigate(e.detail)}></reserver-reservation-editor>)
+    } else if (this.page === RouterPage.EXAMINATIONS) {
+      console.log('Examinations');
+      element = (<reserver-examination-list apiBase={this.apiBase} onNavigate={(e) => navigate(e.detail)}></reserver-examination-list>)
+    } else if (this.page === RouterPage.EDIT_EXAMINATION) {
+      console.log('Edit examination', this.params['id']);
+      element = (<reserver-examination-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={(e) => navigate(e.detail)}></reserver-examination-editor>)
     }
 
     return (

@@ -10,6 +10,13 @@ export namespace Components {
         "apiBase": string;
         "basePath": string;
     }
+    interface ReserverExaminationEditor {
+        "apiBase": string;
+        "entityId": string;
+    }
+    interface ReserverExaminationList {
+        "apiBase": string;
+    }
     interface ReserverHome {
     }
     interface ReserverReservationEditor {
@@ -19,6 +26,14 @@ export namespace Components {
     interface ReserverRoomList {
         "apiBase": string;
     }
+}
+export interface ReserverExaminationEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLReserverExaminationEditorElement;
+}
+export interface ReserverExaminationListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLReserverExaminationListElement;
 }
 export interface ReserverHomeCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -38,6 +53,40 @@ declare global {
     var HTMLReserverAppElement: {
         prototype: HTMLReserverAppElement;
         new (): HTMLReserverAppElement;
+    };
+    interface HTMLReserverExaminationEditorElementEventMap {
+        "navigate": string;
+    }
+    interface HTMLReserverExaminationEditorElement extends Components.ReserverExaminationEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLReserverExaminationEditorElementEventMap>(type: K, listener: (this: HTMLReserverExaminationEditorElement, ev: ReserverExaminationEditorCustomEvent<HTMLReserverExaminationEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLReserverExaminationEditorElementEventMap>(type: K, listener: (this: HTMLReserverExaminationEditorElement, ev: ReserverExaminationEditorCustomEvent<HTMLReserverExaminationEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLReserverExaminationEditorElement: {
+        prototype: HTMLReserverExaminationEditorElement;
+        new (): HTMLReserverExaminationEditorElement;
+    };
+    interface HTMLReserverExaminationListElementEventMap {
+        "navigate": string;
+    }
+    interface HTMLReserverExaminationListElement extends Components.ReserverExaminationList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLReserverExaminationListElementEventMap>(type: K, listener: (this: HTMLReserverExaminationListElement, ev: ReserverExaminationListCustomEvent<HTMLReserverExaminationListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLReserverExaminationListElementEventMap>(type: K, listener: (this: HTMLReserverExaminationListElement, ev: ReserverExaminationListCustomEvent<HTMLReserverExaminationListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLReserverExaminationListElement: {
+        prototype: HTMLReserverExaminationListElement;
+        new (): HTMLReserverExaminationListElement;
     };
     interface HTMLReserverHomeElementEventMap {
         "navigate": string;
@@ -92,6 +141,8 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "reserver-app": HTMLReserverAppElement;
+        "reserver-examination-editor": HTMLReserverExaminationEditorElement;
+        "reserver-examination-list": HTMLReserverExaminationListElement;
         "reserver-home": HTMLReserverHomeElement;
         "reserver-reservation-editor": HTMLReserverReservationEditorElement;
         "reserver-room-list": HTMLReserverRoomListElement;
@@ -101,6 +152,15 @@ declare namespace LocalJSX {
     interface ReserverApp {
         "apiBase"?: string;
         "basePath"?: string;
+    }
+    interface ReserverExaminationEditor {
+        "apiBase"?: string;
+        "entityId"?: string;
+        "onNavigate"?: (event: ReserverExaminationEditorCustomEvent<string>) => void;
+    }
+    interface ReserverExaminationList {
+        "apiBase"?: string;
+        "onNavigate"?: (event: ReserverExaminationListCustomEvent<string>) => void;
     }
     interface ReserverHome {
         "onNavigate"?: (event: ReserverHomeCustomEvent<string>) => void;
@@ -116,6 +176,8 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "reserver-app": ReserverApp;
+        "reserver-examination-editor": ReserverExaminationEditor;
+        "reserver-examination-list": ReserverExaminationList;
         "reserver-home": ReserverHome;
         "reserver-reservation-editor": ReserverReservationEditor;
         "reserver-room-list": ReserverRoomList;
@@ -126,6 +188,8 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "reserver-app": LocalJSX.ReserverApp & JSXBase.HTMLAttributes<HTMLReserverAppElement>;
+            "reserver-examination-editor": LocalJSX.ReserverExaminationEditor & JSXBase.HTMLAttributes<HTMLReserverExaminationEditorElement>;
+            "reserver-examination-list": LocalJSX.ReserverExaminationList & JSXBase.HTMLAttributes<HTMLReserverExaminationListElement>;
             "reserver-home": LocalJSX.ReserverHome & JSXBase.HTMLAttributes<HTMLReserverHomeElement>;
             "reserver-reservation-editor": LocalJSX.ReserverReservationEditor & JSXBase.HTMLAttributes<HTMLReserverReservationEditorElement>;
             "reserver-room-list": LocalJSX.ReserverRoomList & JSXBase.HTMLAttributes<HTMLReserverRoomListElement>;

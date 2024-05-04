@@ -15,7 +15,7 @@ export class ReserverHome {
           <span id="title">Reserver app</span>
           <div id="menu-items">
             <span onClick={() => this.navigate.emit('./reservations')}>Room reservation</span>
-            <span onClick={() => this.navigate.emit('./examination')}>Examination reservation</span>
+            <span onClick={() => this.navigate.emit('./examinations')}>Examination reservation</span>
           </div>
         </div>
       </Host>
