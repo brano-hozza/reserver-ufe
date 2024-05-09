@@ -18,7 +18,7 @@ export class ReserverExaminationList {
   // State
   @State() errorMessages: string[] = [];
 
-  examinations: Examination[];
+  @State() examinations: Examination[];
 
   private async getExaminationsAsync() {
     try {
@@ -47,6 +47,8 @@ export class ReserverExaminationList {
       const response = await ExaminationReservationApiFactory(undefined, this.apiBase).deleteExamination(id);
       if (response.status < 299) {
         this.examinations = this.examinations.filter(e => e.id !== id);
+        console.log(`Examination ${id} deleted`);
+        console.log(this.examinations);
       } else {
         this.errorMessages.push(`Cannot delete examination: ${response.statusText}`);
       }

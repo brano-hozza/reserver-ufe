@@ -18,8 +18,9 @@ export class ReserverRoomList {
   // State
   @State() errorMessages: string[] = [];
 
-  reservations: RoomReservation[] = [];
-  rooms: Room[] = []
+  @State() reservations: RoomReservation[] = [];
+
+  rooms: Room[] = [];
   doctors: Doctor[] = [];
 
   private async getReservationsAsync() {
@@ -101,7 +102,9 @@ export class ReserverRoomList {
     return this.reservations.map(reservation => (
       <md-list-item>
         <md-icon slot="start">home_health</md-icon>
-        <div slot="headline">Room {this.getRoomName(reservation.room)} ({this.getDoctorName(reservation.doctor)})</div>
+        <div slot="headline">
+          Room {this.getRoomName(reservation.room)} ({this.getDoctorName(reservation.doctor)})
+        </div>
         <md-icon style={{ cursor: 'pointer' }} slot="end" onClick={() => this.editReservation(reservation.id)}>
           edit
         </md-icon>
