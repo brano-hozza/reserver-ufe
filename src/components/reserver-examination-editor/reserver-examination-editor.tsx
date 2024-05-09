@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { Department, DepartmentsApiFactory, Doctor, Examination, ExaminationReservationApiFactory, Room, RoomReservationApiFactory } from '../../api/reserver';
+import { Department, DepartmentsApiFactory, Doctor, Examination, ExaminationReservationApiFactory, Room, RoomReservation, RoomReservationApiFactory } from '../../api/reserver';
 import { RouterPage } from '../../types';
 
 @Component({
@@ -20,6 +20,7 @@ export class ReserverExaminationEditor {
   @State() examinations: Examination[] = [];
   @State() examination: Examination;
   @State() rooms: Room[] = [];
+  @State() roomReservations: RoomReservation[] = [];
   @State() departments: Department[] = [];
   @State() doctors: Doctor[] = [];
   @State() patient: string | null = null;
@@ -60,6 +61,20 @@ export class ReserverExaminationEditor {
       console.error(err);
     }
     return null;
+  }
+
+  async getRoomReservations(): Promise<RoomReservation[]> {
+    try {
+      const response = await RoomReservationApiFactory(undefined, this.apiBase).getReservations();
+      if (response.status < 299) {
+        return response.data;
+      } else {
+        this.errorMessages.push(`Cannot retrieve list of room reservations: ${response.statusText}`);
+      }
+    } catch (err: any) {
+      this.errorMessages.push(`Cannot retrieve list of room reservations: ${err.message || 'unknown'}`);
+    }
+    return [];
   }
 
   async getExaminations(): Promise<Examination[]> {
@@ -125,6 +140,7 @@ export class ReserverExaminationEditor {
     this.rooms = await this.getRooms();
     this.departments = await this.getDepartments();
     this.doctors = await this.getDoctors();
+    this.roomReservations = await this.getRoomReservations();
     if (this.examination && !this.isNew) {
       this.selectedRoom = this.examination.room;
       this.selectedDepartment = this.examination.department;
@@ -135,37 +151,43 @@ export class ReserverExaminationEditor {
     }
   }
 
-  selectRoom(e: Event) {
-    this.selectedRoom = (e.target as HTMLSelectElement).value;
-  }
-
   selectDepartment(e: Event) {
     this.selectedDepartment = (e.target as HTMLSelectElement).value;
+    this.selectedDoctor = null;
+    this.selectedRoom = null;
+    this.selectedDate = null;
+    this.selectedTime = null;
   }
 
   selectDoctor(e: Event) {
     this.selectedDoctor = (e.target as HTMLSelectElement).value;
+    this.selectedRoom = null;
+    this.selectedDate = null;
+    this.selectedTime = null;
+  }
+
+  selectRoom(e: Event) {
+    this.selectedRoom = (e.target as HTMLSelectElement).value;
+    this.selectedDate = null;
+    this.selectedTime = null;
   }
 
   selectDate(e: Event) {
     this.selectedDate = (e.target as HTMLInputElement).value;
+    this.selectedTime = null;
   }
 
   get filteredDoctors(): Doctor[] {
     return this.doctors.filter(doctor => doctor.department === this.selectedDepartment);
   }
 
-  get hasChanged(): boolean {
-    return this.patient !== this.examination.patient || this.selectedRoom !== this.examination.room || this.selectedDepartment !== this.examination.department || this.selectedDoctor !== this.examination.doctor || this.selectedDate !== this.examination.datetime.split('T')[0] || this.selectedTime !== this.examination.datetime.split('T')[1].split(':')[0];
+  get filteredRooms(): Room[] {
+    return this.roomReservations.filter(room => room.department === this.selectedDepartment).map(room => this.rooms.find(r => r.id === room.room));
   }
 
   get canSave(): boolean {
     console.log(this.patient, this.selectedRoom, this.selectedDepartment, this.selectedDoctor, this.selectedDate, this.selectedTime, this.hasChanged);
     return !!(this.patient && this.selectedRoom && this.selectedDepartment && this.selectedDoctor && this.selectedDate && this.selectedTime) && this.hasChanged;
-  }
-
-  get canSelectDate(): boolean {
-    return !!(this.selectedRoom && this.selectedDepartment && this.selectedDoctor);
   }
 
   get occupiedTimes(): string[] {
@@ -186,6 +208,17 @@ export class ReserverExaminationEditor {
     }
     console.log(times);
     return times;
+  }
+
+  get hasChanged(): boolean {
+    return (
+      this.patient !== this.examination.patient ||
+      this.selectedRoom !== this.examination.room ||
+      this.selectedDepartment !== this.examination.department ||
+      this.selectedDoctor !== this.examination.doctor ||
+      this.selectedDate !== this.examination.datetime.split('T')[0] ||
+      this.selectedTime !== this.examination.datetime.split('T')[1].split(':')[0]
+    );
   }
 
   async saveExamination() {
@@ -247,17 +280,6 @@ export class ReserverExaminationEditor {
               Patient:
               <input id="patient" type="text" value={this.patient} onChange={e => (this.patient = (e.target as HTMLInputElement).value)} />
             </label>
-            <label htmlFor="room">
-              Room:
-              <select id="room" onChange={e => this.selectRoom(e)}>
-                <option value="">Select room</option>
-                {this.rooms.map(room => (
-                  <option selected={this.selectedRoom === room.id} value={room.id}>
-                    {room.roomNumber}
-                  </option>
-                ))}
-              </select>
-            </label>
             <label htmlFor="department">
               Department:
               <select id="department" onChange={e => this.selectDepartment(e)}>
@@ -280,11 +302,22 @@ export class ReserverExaminationEditor {
                 ))}
               </select>
             </label>
+            <label htmlFor="room">
+              Room:
+              <select id="room" disabled={!this.selectedDoctor} onChange={e => this.selectRoom(e)}>
+                <option value="">Select room</option>
+                {this.filteredRooms.map(room => (
+                  <option selected={this.selectedRoom === room.id} value={room.id}>
+                    {room.roomNumber}
+                  </option>
+                ))}
+              </select>
+            </label>
             <label htmlFor="datetime">
               Date and time:
               <div id="datetime">
-                <input id="date" disabled={!this.canSelectDate} type="date" min={this.today} value={this.selectedDate} onChange={e => this.selectDate(e)}/>
-                <select id="time" disabled={!this.canSelectDate || !this.selectedDate } onChange={e => (this.selectedTime = (e.target as HTMLInputElement).value)}>
+                <input id="date" disabled={!this.selectedRoom} type="date" min={this.today} value={this.selectedDate} onChange={e => this.selectDate(e)} />
+                <select id="time" disabled={!this.selectedDate} onChange={e => (this.selectedTime = (e.target as HTMLInputElement).value)}>
                   <option value="">Select time</option>
                   {this.availableTimes.map(time => (
                     <option selected={this.selectedTime === time} value={time}>
@@ -305,4 +338,3 @@ export class ReserverExaminationEditor {
     );
   }
 }
-

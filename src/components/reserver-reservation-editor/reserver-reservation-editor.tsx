@@ -18,6 +18,7 @@ export class ReserverReservationEditor {
   // State
   @State() errorMessages: string[] = [];
   @State() reservation: RoomReservation;
+  @State() reservations: RoomReservation[] = [];
   @State() rooms: Room[] = [];
   @State() departments: Department[] = [];
   @State() doctors: Doctor[] = [];
@@ -52,6 +53,20 @@ export class ReserverReservationEditor {
       console.error(err);
     }
     return null;
+  }
+
+  async getReservations(): Promise<RoomReservation[]> {
+    try {
+      const response = await RoomReservationApiFactory(undefined, this.apiBase).getReservations();
+      if (response.status < 299) {
+        return response.data;
+      } else {
+        this.errorMessages.push(`Cannot retrieve list of reservations: ${response.statusText}`);
+      }
+    } catch (err: any) {
+      this.errorMessages.push(`Cannot retrieve list of reservations: ${err.message || 'unknown'}`);
+    }
+    return [];
   }
 
   async getRooms(): Promise<Room[]> {
@@ -101,6 +116,7 @@ export class ReserverReservationEditor {
     this.departments = await this.getDepartments();
     this.doctors = await this.getDoctors();
     this.reservation = await this.getReservation();
+    this.reservations = await this.getReservations();
 
     if (this.reservation) {
       this.selectedRoom = this.reservation.room;
@@ -119,6 +135,10 @@ export class ReserverReservationEditor {
 
   selectDoctor(e: Event) {
     this.selectedDoctor = (e.target as HTMLSelectElement).value;
+  }
+
+  get filteredRooms(): Room[] {
+    return this.rooms.filter(room => !this.reservations.some(reservation => reservation.room === room.id));
   }
 
   get filteredDoctors(): Doctor[] {
@@ -190,7 +210,7 @@ export class ReserverReservationEditor {
               Room:
               <select id="room" onChange={e => this.selectRoom(e)}>
                 <option value="">Select room</option>
-                {this.rooms.map(room => (
+                {this.filteredRooms.map(room => (
                   <option selected={this.selectedRoom === room.id} value={room.id}>
                     {room.roomNumber}
                   </option>
