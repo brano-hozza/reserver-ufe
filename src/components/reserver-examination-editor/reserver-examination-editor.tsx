@@ -182,7 +182,9 @@ export class ReserverExaminationEditor {
   }
 
   get filteredRooms(): Room[] {
-    return this.roomReservations.filter(room => room.department === this.selectedDepartment).map(room => this.rooms.find(r => r.id === room.room));
+    return this.roomReservations
+      .filter(room => room.department === this.selectedDepartment && room.doctor === this.selectedDoctor)
+      .map(room => this.rooms.find(r => r.id === room.room));
   }
 
   get canSave(): boolean {
@@ -191,7 +193,9 @@ export class ReserverExaminationEditor {
   }
 
   get occupiedTimes(): string[] {
-    return this.examinations.filter(e => e.id !== this.examination.id).map(examination => examination.datetime.split('T')[1].split(':').slice(0, 2).join(':'));
+    return this.examinations
+      .filter(e => e.id !== this.examination.id && e.datetime.split('T')[0] === this.selectedDate && e.room === this.selectedRoom)
+      .map(examination => examination.datetime.split('T')[1].split(':').slice(0, 2).join(':'));
   }
 
   get availableTimes(): string[] {
