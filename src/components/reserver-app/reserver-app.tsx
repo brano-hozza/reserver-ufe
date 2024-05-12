@@ -14,8 +14,6 @@ export class ReserverApp {
   @Prop() basePath: string = '';
   @Prop() apiBase: string;
 
-
-
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
 
@@ -48,30 +46,18 @@ export class ReserverApp {
     };
 
     let element: null | Element = null;
-    if(this.page === RouterPage.HOME){
-      console.log('Home');
-      element = (<reserver-home onNavigate={(e) => navigate(e.detail)}></reserver-home>)
-    }
-    else if( this.page === RouterPage.RESERVATIONS){
-      console.log('Reservations');
-      element = (<reserver-room-list apiBase={this.apiBase} onNavigate={(e) => navigate(e.detail)}></reserver-room-list>)
-    }
-    else if(this.page === RouterPage.EDIT_RESERVATION){
-      console.log('Edit reservation', this.params['id']);
-      element = (<reserver-reservation-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={(e) => navigate(e.detail)}></reserver-reservation-editor>)
+    if (this.page === RouterPage.HOME) {
+      element = <reserver-home onNavigate={e => navigate(e.detail)}></reserver-home>;
+    } else if (this.page === RouterPage.RESERVATIONS) {
+      element = <reserver-room-list apiBase={this.apiBase} onNavigate={e => navigate(e.detail)}></reserver-room-list>;
+    } else if (this.page === RouterPage.EDIT_RESERVATION) {
+      element = <reserver-reservation-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={e => navigate(e.detail)}></reserver-reservation-editor>;
     } else if (this.page === RouterPage.EXAMINATIONS) {
-      console.log('Examinations');
-      element = (<reserver-examination-list apiBase={this.apiBase} onNavigate={(e) => navigate(e.detail)}></reserver-examination-list>)
+      element = <reserver-examination-list apiBase={this.apiBase} onNavigate={e => navigate(e.detail)}></reserver-examination-list>;
     } else if (this.page === RouterPage.EDIT_EXAMINATION) {
-      console.log('Edit examination', this.params['id']);
-      element = (<reserver-examination-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={(e) => navigate(e.detail)}></reserver-examination-editor>)
+      element = <reserver-examination-editor apiBase={this.apiBase} entityId={this.params['id']} onNavigate={e => navigate(e.detail)}></reserver-examination-editor>;
     }
 
-    return (
-      <Host>
-        {element}
-      </Host>
-    );
+    return <Host>{element}</Host>;
   }
-
 }

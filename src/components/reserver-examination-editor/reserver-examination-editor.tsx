@@ -147,7 +147,6 @@ export class ReserverExaminationEditor {
       this.selectedDoctor = this.examination.doctor;
       this.selectedDate = this.examination.datetime.split('T')[0];
       this.selectedTime = this.examination.datetime.split('T')[1].split(':').slice(0, 2).join(':');
-      console.log(this.selectedTime);
     }
   }
 
@@ -188,7 +187,6 @@ export class ReserverExaminationEditor {
   }
 
   get canSave(): boolean {
-    console.log(this.patient, this.selectedRoom, this.selectedDepartment, this.selectedDoctor, this.selectedDate, this.selectedTime, this.hasChanged);
     return !!(this.patient && this.selectedRoom && this.selectedDepartment && this.selectedDoctor && this.selectedDate && this.selectedTime) && this.hasChanged;
   }
 
@@ -210,7 +208,6 @@ export class ReserverExaminationEditor {
         times.push(time2);
       }
     }
-    console.log(times);
     return times;
   }
 
@@ -267,13 +264,17 @@ export class ReserverExaminationEditor {
     return (
       <Host>
         <div part="header">
-          <h2>Editor {this.isNew && '(New)'}</h2>
+          <h2>Editor{this.isNew && ' (New)'}</h2>
           <button id="navigation-button" onClick={() => this.navigate.emit(RouterPage.EXAMINATIONS)}>
             Back to list
           </button>
         </div>
         {this.errorMessages.length > 0 ? (
-          this.errorMessages.map(e => <div part="error-message">{e}</div>)
+          this.errorMessages.map(e => (
+            <div class="error" part="error-message">
+              {e}
+            </div>
+          ))
         ) : this.examination ? (
           <div part="content">
             <label htmlFor="examination-id">
@@ -336,7 +337,9 @@ export class ReserverExaminationEditor {
             </button>
           </div>
         ) : (
-          <div part="loading">Loading...</div>
+          <div id="loading" part="loading">
+            Loading...
+          </div>
         )}
       </Host>
     );

@@ -1,47 +1,29 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { ReserverRoomList } from '../reserver-room-list';
-
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { RoomReservation } from '../../../api/reserver';
+import { delay, SAMPLE_DOCTORS, SAMPLE_RESERVATIONS, SAMPLE_ROOMS } from '../../../utils/mocks';
+import { ReserverRoomList } from '../reserver-room-list';
 
 describe('reserver-room-list', () => {
-  const sampleEntries: RoomReservation[] = [
-    {
-      id: 'entry-1',
-      room: '1',
-      department: '1',
-      doctor: '1',
-    },
-    {
-      id: 'entry-2',
-      room: '2',
-      department: '2',
-      doctor: '2',
-    },
-  ];
   let mock: MockAdapter;
-
   beforeAll(() => {
     mock = new MockAdapter(axios);
+  });
+  beforeEach(() => {
+    mock.onGet(/^.*\/rooms$/).reply(200, SAMPLE_ROOMS);
+    mock.onGet(/^.*\/doctors$/).reply(200, SAMPLE_DOCTORS);
+    mock.onGet(/^.*\/reservation$/).reply(200, SAMPLE_RESERVATIONS);
   });
   afterEach(() => {
     mock.reset();
   });
-
   it('renders samples', async () => {
-    mock.onGet().reply(200, sampleEntries);
-
     const page = await newSpecPage({
       components: [ReserverRoomList],
-      html: `<reserver-room-list api-base="http://test/api"></reserver-room-list>`,
+      html: `<reserver-room-list></reserver-room-list>`,
     });
-
-    const wlList = page.rootInstance as ReserverRoomList;
-    const expectedRooms = wlList?.reservations?.length;
-
+    delay(500);
     const items = page.root.shadowRoot.querySelectorAll('md-list-item');
-    expect(expectedRooms).toEqual(sampleEntries.length);
-    expect(items.length).toEqual(expectedRooms);
-  })
+    expect(items.length).toEqual(SAMPLE_RESERVATIONS.length);
+  });
 });
